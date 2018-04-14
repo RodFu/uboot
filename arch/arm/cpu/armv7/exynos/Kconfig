@@ -21,6 +21,10 @@ config TARGET_ORIGEN
 config TARGET_TRATS2
 	bool "Exynos4412 Trat2 board"
 
+config TARGET_ITOP4412
+        bool "Exynos4412 iTop4412 board"
+        select SUPPORT_SPL
+
 config TARGET_LANDROVER
 	bool "Exynos4412 Ultimate board"
 	select SUPPORT_SPL
@@ -89,6 +93,7 @@ source "board/samsung/trats/Kconfig"
 source "board/samsung/universal_c210/Kconfig"
 source "board/samsung/origen/Kconfig"
 source "board/samsung/trats2/Kconfig"
+source "board/samsung/iTop4412/Kconfig"
 source "board/samsung/landrover/Kconfig"
 source "board/samsung/odroid/Kconfig"
 source "board/samsung/arndale/Kconfig"

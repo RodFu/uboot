@@ -1,0 +1,12 @@
+if TARGET_ITOP4412
+
+config SYS_BOARD
+	default "iTop4412"
+
+config SYS_VENDOR
+	default "samsung"
+
+config SYS_CONFIG_NAME
+	default "iTop4412"
+
+endif

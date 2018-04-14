@@ -2,10 +2,11 @@
 
 ROOT_DIR=$(pwd)
 SEC_PATH="$ROOT_DIR/CodeSign4SecureBoot"
+BOARD_NAME=iTop4412
 
 rm -rf u-boot.bin
 
-make landrover_defconfig
+make ${BOARD_NAME}_defconfig
 make -j$CPU_JOB_NUM
 
 if [ ! -f u-boot.bin ]
@@ -39,7 +40,7 @@ echo "fusing u-boot image......"
 # | |
 # +------------+------------------------------------------------------------+
 #
-cat $SEC_PATH/E4412_N.bl1.SCP2G.bin spl/landrover-spl.bin u-boot.bin > u-boot-iTop4412.bin
+cat $SEC_PATH/E4412_N.bl1.SCP2G.bin spl/${BOARD_NAME}-spl.bin u-boot.bin > u-boot-${BOARD_NAME}.bin
 
 echo "build complete successfully......"
 

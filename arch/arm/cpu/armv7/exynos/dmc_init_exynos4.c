@@ -26,7 +26,13 @@
 #include <config.h>
 #include <asm/arch/dmc.h>
 #include "common_setup.h"
+#if defined (CONFIG_TARGET_ITOP4412)
+#include "iTop4412_setup.h"
+#elif defined (CONFIG_TARGET_LANDOVER)
 #include "landrover_setup.h"
+#else
+#include "exynos4_setup.h"
+#endif
 
 struct mem_timings mem = {
 	.direct_cmd_msr = {

@@ -30,7 +30,13 @@
 #include <asm/arch/clk.h>
 #include <asm/arch/clock.h>
 #include "common_setup.h"
+#if defined (CONFIG_TARGET_ITOP4412)
+#include "iTop4412_setup.h"
+#elif defined (CONFIG_TARGET_LANDOVER)
 #include "landrover_setup.h"
+#else
+#include "exynos4_setup.h"
+#endif
 
 /*
  * system_clock_init: Initialize core clock and bus clock.
@@ -179,11 +185,18 @@ void system_clock_init(void)
 
 	if (((value >> 8) & 0x3) != 2)
 		return;
-	
-	addr = (unsigned int *)(LANDROVER_POWER_BASE+C2C_CTRL_OFFSET);
+
+#if defined (CONFIG_TARGET_ITOP4412)
+	addr = (unsigned int *)(ITOP4412_POWER_BASE + C2C_CTRL_OFFSET);
 	value = readl(addr);
 	if ((value & 0x1) != 0)
 		return;
+#elif defined (CONFIG_TARGET_LANDOVER)
+	addr = (unsigned int *)(LANDROVER_POWER_BASE + C2C_CTRL_OFFSET);
+	value = readl(addr);
+	if ((value & 0x1) != 0)
+		return;
+#endif
 
 	addr = (unsigned int *)(APB_DMC_0_BASE+DMC_PHYCONTROL0);
 	writel (0x7F10100A, addr);
