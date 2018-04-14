@@ -1,36 +1,48 @@
 #!/bin/sh
 
-sec_path="./CodeSign4SecureBoot"
 ROOT_DIR=$(pwd)
+SEC_PATH="$ROOT_DIR/CodeSign4SecureBoot"
 
 rm -rf u-boot.bin
+
+make landrover_defconfig
 make -j$CPU_JOB_NUM
 
 if [ ! -f u-boot.bin ]
 then
-	echo "!!!not found u-boot.bin"
+	echo "Failed to find u-boot.bin......"
+    exit
 fi
 
-cp spl/landrover-spl.bin bl2.bin
-
 ####################################################
-#cat spl/u-boot-spl.bin pad00.bin > image.bin
-
-#./mkbl2 image.bin bl2.bin 14336
+#./mkbl2 spl/u-boot-spl.bin bl2-checksum.bin 14336
+#cat bl2-checksum.bin pad00.bin > bl2.bin
 ####################################################
 
-cp -rf bl2.bin $sec_path
-cp -rf u-boot.bin $sec_path
-cd $sec_path
+echo "fusing u-boot image......"
 
-echo "fusing image.bin......"
+# SD MMC layout:
+# +------------+------------------------------------------------------------+
+# | |
+# | | | | | |
+# | 512B | 8K(bl1) | 16k(bl2) | 16k(ENV) | 512k(u-boot) |
+# | | | | | |
+# | |
+# +------------+------------------------------------------------------------+
+#
+cat $SEC_PATH/E4412_N.bl1.SCP2G.bin spl/landrover-spl.bin $SEC_PATH/env.bin u-boot.bin > u-boot-iTop4412-sd.bin
 
-################ for sd MMC boot ##################
-cat E4412_N.bl1.SCP2G.bin bl2.bin env.bin u-boot.bin > image.bin
-################# for eMMC boot ####################
-#cat E4412_N.bl1.SCP2G.bin bl2.bin u-boot.bin > image.bin
-####################################################
-mv image.bin $ROOT_DIR
-cd $ROOT_DIR
+# eMMC layout:
+# +------------+------------------------------------------------------------+
+# | |
+# | | | | | |
+# | 8K(bl1) | 16k(bl2) | 512k(u-boot) |
+# | | | | | |
+# | |
+# +------------+------------------------------------------------------------+
+#
+cat $SEC_PATH/E4412_N.bl1.SCP2G.bin spl/landrover-spl.bin u-boot.bin > u-boot-iTop4412-emmc.bin
 
-echo "done!!!"
+echo "build complete successfully......"
+
+

@@ -1037,7 +1037,6 @@ __weak void board_init_f(ulong boot_flags)
 
 	gd->flags = boot_flags;
 	gd->have_console = 0;
-	printascii("board_init_f.\n");
 
 	if (initcall_run_list(init_sequence_f))
 		hang();
