@@ -88,7 +88,7 @@
 
 /* MMC SPL */
 #define COPY_BL2_FNPTR_ADDR		0x02020030
-#define CONFIG_SPL_TEXT_BASE	0x02023400	/*0x02021410*/
+#define CONFIG_SPL_TEXT_BASE	0x02023400
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"loadaddr=0x40007000\0" \
@@ -132,23 +132,37 @@
 /* MIU (Memory Interleaving Unit) */
 #define CONFIG_MIU_2BIT_21_7_INTERLEAVED
 
+/*
+* SD MMC layout:
+* +------------+------------------------------------------------------------+
+* | |
+* | | | | | |
+* | 512B | 8K(bl1) | 16k(bl2) | 512k(u-boot) | 16k(ENV) |
+* | | | | | |
+* | |
+* +------------+------------------------------------------------------------+
+*
+*/
+
 #define CONFIG_ENV_IS_IN_MMC
-#define CONFIG_SYS_MMC_ENV_DEV		0
-#define CONFIG_ENV_SIZE			(16 << 10)	/* 16 KB */
-#define RESERVE_BLOCK_SIZE		(512)
-#define BL1_SIZE			(16 << 10) /*16 K reserved for BL1*/
-#define CONFIG_ENV_OFFSET		(RESERVE_BLOCK_SIZE + BL1_SIZE)
+#define CONFIG_SYS_MMC_ENV_DEV      0
+#define RESERVE_BLOCK_SIZE          (512)
+#define BL1_SIZE                    ( 8 << 10) /* 8 K reserved for BL1 */
+#define BL2_SIZE                    (16 << 10) /* 16 k reserved for BL2 */
 
-#define CONFIG_SPL_LDSCRIPT	"board/samsung/common/exynos-uboot-spl.lds"
-#define CONFIG_SPL_MAX_FOOTPRINT	(14 * 1024)
+#define CONFIG_SPL_LDSCRIPT         "board/samsung/common/exynos-uboot-spl.lds"
+#define CONFIG_SPL_MAX_FOOTPRINT    (14 * 1024)
 
-#define CONFIG_SPL_STACK			0x02040000
-#define UBOOT_SIZE					(2 << 20)
-#define CONFIG_SYS_INIT_SP_ADDR		(CONFIG_SYS_TEXT_BASE+UBOOT_SIZE-0x1000)
+#define CONFIG_SPL_STACK            0x02040000
+#define UBOOT_SIZE                  (2 << 20)
+#define CONFIG_SYS_INIT_SP_ADDR     (CONFIG_SYS_TEXT_BASE + UBOOT_SIZE - 0x1000)
 
 /* U-boot copy size (512KB) from boot Media to DRAM.*/
-#define COPY_BL2_SIZE		0x80000
-#define BL2_START_OFFSET	((CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)/512)
-#define BL2_SIZE_BLOC_COUNT	(COPY_BL2_SIZE/512)
+#define COPY_UBOOT_SIZE             0x80000
+#define UBOOT_START_OFFSET          ((RESERVE_BLOCK_SIZE + BL1_SIZE + BL2_SIZE)/512)
+#define UBOOT_SIZE_BLOC_COUNT       (COPY_UBOOT_SIZE/512)
+
+#define CONFIG_ENV_SIZE             (16 << 10) /* 16 KB */
+#define CONFIG_ENV_OFFSET           (UBOOT_START_OFFSET + COPY_UBOOT_SIZE)
 
 #endif	/* __CONFIG_H */

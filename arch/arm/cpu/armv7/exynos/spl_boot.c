@@ -221,8 +221,8 @@ void copy_uboot_to_ram(void)
 		break;
 #endif
 	case BOOT_MODE_SD:
-		offset = BL2_START_OFFSET;
-		size = BL2_SIZE_BLOC_COUNT;
+		offset = UBOOT_START_OFFSET;
+		size = UBOOT_SIZE_BLOC_COUNT;
 		copy_bl2 = get_irom_func(MMC_INDEX);
 		break;
 #ifdef CONFIG_SUPPORT_EMMC_BOOT
@@ -234,7 +234,7 @@ void copy_uboot_to_ram(void)
 		copy_bl2_from_emmc = get_irom_func(EMMC44_INDEX);
 		end_bootop_from_emmc = get_irom_func(EMMC44_END_INDEX);
 
-		copy_bl2_from_emmc(BL2_SIZE_BLOC_COUNT, CONFIG_SYS_TEXT_BASE);
+		copy_bl2_from_emmc(UBOOT_SIZE_BLOC_COUNT, CONFIG_SYS_TEXT_BASE);
 		end_bootop_from_emmc();
 		break;
 #endif
