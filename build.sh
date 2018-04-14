@@ -30,18 +30,16 @@ echo "fusing u-boot image......"
 # | |
 # +------------+------------------------------------------------------------+
 #
-cat $SEC_PATH/E4412_N.bl1.SCP2G.bin spl/landrover-spl.bin u-boot.bin $SEC_PATH/env.bin > u-boot-iTop4412-sd.bin
-
 # eMMC layout:
 # +------------+------------------------------------------------------------+
 # | |
 # | | | | | |
-# | 8K(bl1) | 16k(bl2) | 512k(u-boot) |
+# | 8K(bl1) | 16k(bl2) | 512k(u-boot) | 16k(ENV) |
 # | | | | | |
 # | |
 # +------------+------------------------------------------------------------+
 #
-cat $SEC_PATH/E4412_N.bl1.SCP2G.bin spl/landrover-spl.bin u-boot.bin > u-boot-iTop4412-emmc.bin
+cat $SEC_PATH/E4412_N.bl1.SCP2G.bin spl/landrover-spl.bin u-boot.bin > u-boot-iTop4412.bin
 
 echo "build complete successfully......"
 
