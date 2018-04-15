@@ -1,8 +1,13 @@
 #!/bin/sh
 
+ARCH=arm
+CROSS_COMPILE=arm-none-linux-gnueabi-
+
+BOARD_NAME=iTop4412
+CPU_JOB_NUM=4
+
 ROOT_DIR=$(pwd)
 SEC_PATH="$ROOT_DIR/CodeSign4SecureBoot"
-BOARD_NAME=iTop4412
 
 rm -rf u-boot.bin
 
